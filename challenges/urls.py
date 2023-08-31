@@ -11,7 +11,12 @@ urlpatterns = [
     ## write for all month individually
     ## It can be done dynamically using the placeholder 
     ## as given below
-    path("<month>", views.monthly_challenge)
+    path("", views.index),  # this is for url /challenge/
+    path("<int:month>", views.monthly_challenge_by_number),
+    path("<str:month>", views.monthly_challenge, name="month-challenge")
+    # here name is used to construct path for url
+    
     # variable inside <> can be anything but same name needs to be used in views.py 
     ## as arguement for monthly_challenge
+    ## here we can specify the datatype expected
 ]

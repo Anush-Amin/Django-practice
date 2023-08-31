@@ -27,3 +27,4 @@ def index(request):
     return HttpResponse("This works!")
 12) Create a urls.py file inside challenges and add code there
 13) Now add code to urls.py file in monthly_challenges folder
+14) Redirects: 

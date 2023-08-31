@@ -1,5 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.urls import reverse
+
+monthly_challenges = {
+    "january": "Eat no meat for entire month",
+    "febraury": "Walk for atleast 20 min everyday!",
+    "march": "Learn Django for atleast 20 min everyday!",
+    "april": "Eat no meat for entire month",
+    "may": "Walk for atleast 20 min everyday!",
+    "june": "Learn Django for atleast 20 min everyday!",
+    "july": "Eat no meat for entire month",
+    "august": "Walk for atleast 20 min everyday!",
+    "september": "Learn Django for atleast 20 min everyday!",
+    "october": "Eat no meat for entire month",
+    "november": "Walk for atleast 20 min everyday!",
+    "december": "Learn Django for atleast 20 min everyday!"
+}
 
 # Create your views here.
 
@@ -12,14 +28,40 @@ from django.http import HttpResponse, HttpResponseNotFound
 #def march(request):
 #    return HttpResponse("Learn Django for atleast 20 min everyday!")
 
+def index(request):
+    list_items = ""
+    months = list(monthly_challenges.keys())
+
+    for month in months:
+        capitalized_month = month.capitalize()
+        month_path = reverse("month-challenge", args=[month])
+        list_items += f"<li><a href=\"{month_path}\">{capitalized_month}</a></li>"
+
+    response_data = f"<ul>{list_items}</ul>"
+    return HttpResponse(response_data)
+
+def monthly_challenge_by_number(request, month):
+    """Here if number is entered in the URL it will
+    be redirected to the month corresponding to that number
+    Ex: if http://127.0.0.1:8000/challenges/2
+    it will be redirected to http://127.0.0.1:8000/challenges/february"""
+    months = list(monthly_challenges.keys())
+    if month > len(months):
+        return HttpResponseNotFound("Invalid month")
+    redirect_month = months[month-1]
+    #return HttpResponseRedirect("/challenges/"+redirect_month)
+    ## instead of hard-coding the url as above we can use 
+    ## the main use of this is even if we change the url path in urls.py (inside monthly_challenges) we still get the response
+    ## try this by changing "challenge/" to "anyname/"
+    redirect_path = reverse("month-challenge", args=[redirect_month]) # this will build path /challenges/january
+    return HttpResponseRedirect(redirect_path)
+
 def monthly_challenge(request, month):
-    challenge_text = None
-    if month == 'january':
-        challenge_text = "Eat no meat for entire month"
-    elif month == 'february':
-        challenge_text = "Walk for atleast 20 min everyday!"
-    elif month == 'march':
-        challenge_text = "Learn Django for atleast 20 min everyday!"
-    else:
-        return HttpResponseNotFound("This month is not supported")
-    return HttpResponse(challenge_text)
+    try:
+        challenge_text = monthly_challenges[month]
+        response_data = f"<h1>{challenge_text}</h1>"
+        return HttpResponse(response_data)
+    except:
+        return HttpResponseNotFound("<h1>This month is not supported!</h1>")
+
+    
