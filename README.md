@@ -40,3 +40,8 @@ For example: {{variable|title}} if variable is "my FIRST post", the output will 
 * tags: for tags is used for looping, url tag is used for constructing url
 19) Template inheritance: Instead of writing the entire skeleton for all html files, we can create a html file which contains basic skeleton and this can be used by all other html files. Create this base.html file in templates folder. Use block tag where other files need to have dynamic changes. Use {% extends 'base.html' %} in the html files which uses base.html
 Note: the path given here for base.html is absolute. To make django recognize this path, in monthly_challenges -> settings.py add BASE_DIR / "templates" in TEMPLATES list
+20) To add navigation tab just in page other than challenges home page, we can create the includes->header.html file. Inside this file create the header with navigation tab. To use this in the other html pages use {% include "challenges/includes/header.html" %}. Inorder to add a link to navigation bar in header.html use the name of path. For example in the challenges-> urls.py give name as path("", views.index, name="index"). Use this name "index" inside href as <a href="{% url 'index' %}">All Challenges</a> in header.html
+21) The css files need to kept in the static folder. Inorder to make django detect the root static folder (not ones inside app), in the settings.py add STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR /  "static"
+]

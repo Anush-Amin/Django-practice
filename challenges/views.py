@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
 from django.template.loader import render_to_string
 
@@ -73,6 +73,11 @@ def monthly_challenge(request, month):
              "month_name": month
         })
     except:
-        return HttpResponseNotFound("<h1>This month is not supported!</h1>")
-
+        # response_data = render_to_string("404.html")
+        # return HttpResponseNotFound(response_data)
+        ## we can use the above code to have 404 error
+        ## or can use below code
+        raise Http404() # this code will look for 404.html file in templates folder
+        ## for the above code to work we must set DEBUG=False in seetings.py of montly_challenges folder
+        ## but DEBUG=False should be set during deployment
     
